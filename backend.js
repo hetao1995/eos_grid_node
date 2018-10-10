@@ -27,8 +27,8 @@ let Simulator = {
 		}
 
 		instance.community.grid[0] = Grid.createNew('grid', 'grid0', 'gridMeter0', 400);
-		instance.community.generator[0] = Generator.createNew('solar', 'solar0', 'solarMeter0', 100);
-		instance.community.generator[1] = Generator.createNew('wind', 'wind0', 'windMeter0', 50);
+		instance.community.generator[0] = Generator.createNew('solar', 'solar0', 'solarMeter0', 10);
+		instance.community.generator[1] = Generator.createNew('wind', 'wind0', 'windMeter0', 5);
 		instance.community.battery[0] = Battery.createNew('battery', 'battery0', 5000, 0.3, 0.5);
 		
 		instance.ChangeUserId = function (oldId, newId) {
