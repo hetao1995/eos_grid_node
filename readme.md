@@ -10,4 +10,4 @@ Keywords:
 Simulate a power grid system on blockchain. EOS interaction requires EOS PATH enviroment, in addition, it is disabled on Win and Darwin platforms by default. To enable them, comment the code in eosOperation.js.
 
 ![DEMO](https://github.com/hetao1995/eos_grid_node/blob/master/demo.png)
-![MOBILE]https://github.com/hetao1995/eos_grid_node/blob/master/mobile.png)
+![MOBILE](https://github.com/hetao1995/eos_grid_node/blob/master/mobile.png)
