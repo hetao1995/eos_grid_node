@@ -1200,7 +1200,7 @@
 	function pageClose() {
 		dataSocket.close();
 	}
-	let webSocketAddress = 'ws://127.0.0.1:5556';
+	let webSocketAddress = 'ws://192.168.0.120:5556';
 	if ("WebSocket" in window) {
 		dataSocket = new WebSocket(webSocketAddress);
 		dataSocket.onopen = function () {

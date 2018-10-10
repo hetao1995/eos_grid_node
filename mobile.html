@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=gb2312" />
+    <title>Eos Grid Simulation</title>
+    <script src='lib/vue.js'></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+</head>
+<style>
+    body {
+        background: url("res/background_mobile.png") no-repeat;
+        background-size: 100%;
+    }
+    #table{
+        width: 100%;
+        height: 100%;
+        color: rgba(255,255,255,0.6);
+    }
+    .table_div{
+        opacity: 0.6;
+        background: rgba(255,255,255,0.06);
+        border-radius: 10px;
+        margin: 1em;
+    }
+    .buy_div{
+        color: rgba(255,255,255,0.6);
+        margin: 1em;
+    }
+    #error{
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        color: orangered;
+    }
+    #success{
+        width: 100%;
+        height: 100%;
+    }
+
+</style>
+<body>
+<div id="main">
+    <div id="error"v-if="!state" >
+        <div >
+            网络连接出错，请检查网络连接状况！
+        </div>
+    </div>
+    <div id="success" v-if="state">
+        <div class="table_div" >
+            <!--Table-->
+            <table id="table">
+                <tr>
+                    <td>用户</td>
+                    <td>购买量</td>
+                    <td>价格</td>
+                    <td>时间</td>
+                </tr>
+                <tr>
+                    <td>{{user0}}</td>
+                    <td>{{amount0}}</td>
+                    <td>{{price0}}</td>
+                    <td>{{time0}}</td>
+                </tr>
+                <tr>
+                    <td>{{user1}}</td>
+                    <td>{{amount1}}</td>
+                    <td>{{price1}}</td>
+                    <td>{{time1}}</td>
+                </tr>
+                <tr>
+                    <td>{{user2}}</td>
+                    <td>{{amount2}}</td>
+                    <td>{{price2}}</td>
+                    <td>{{time2}}</td>
+                </tr>
+                <tr>
+                    <td>{{user3}}</td>
+                    <td>{{amount3}}</td>
+                    <td>{{price3}}</td>
+                    <td>{{time3}}</td>
+                </tr>
+                <tr>
+                    <td>{{user4}}</td>
+                    <td>{{amount4}}</td>
+                    <td>{{price4}}</td>
+                    <td>{{time4}}</td>
+                </tr>
+                <tr>
+                    <td>{{user5}}</td>
+                    <td>{{amount5}}</td>
+                    <td>{{price5}}</td>
+                    <td>{{time5}}</td>
+                </tr>
+                <tr>
+                    <td>{{user6}}</td>
+                    <td>{{amount6}}</td>
+                    <td>{{price6}}</td>
+                    <td>{{time6}}</td>
+                </tr>
+            </table>
+        </div>
+        <div  class="buy_div" style="margin: 40% 15%">
+
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                用户名：<input type="text"  v-model="homeName" style="opacity: 10%;background-color: rgba(255,255,255,0.1);color: rgba(255,255,255,1)" @mouseleave="leave"><br>
+                <span style="color: red; font-size: 3px">{{nameError}}</span><br>
+                传统能源剩余: {{fossilEnergyRemain}}<br>
+                清洁能源剩余: {{cleanEnergyRemain}}<br>
+                购买传统能源: <input type="text"   v-model="fossilEnergyCount" style="opacity: 10%;background-color: rgba(255,255,255,0.1);color: rgba(255,255,255,1)"><br>
+                清洁能源报价: <input type="text"   v-model="cleanEnergyPrice" style="opacity: 10%;background-color: rgba(255,255,255,0.1);color: rgba(255,255,255,1)"><br>
+
+                <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button  type="button" @click="send" style="height:3em; width:10em; color: rgba(255,255,255,1); background-color: rgba(255,255,255,0.1); opacity: 10%">确定</button>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+<script>
+    let vm = new Vue({
+        el:'#main',
+        data:{
+            state: false,
+            homeName: '',
+            fossilEnergyCount:0,
+            cleanEnergyPrice:0,
+            fossilEnergyRemain:0,
+            cleanEnergyRemain:0,
+            nameError:'',
+            community:{},
+            user0 : 'user0',
+            user1 : 'user1',
+            user2 : 'user2',
+            user3 : 'user3',
+            user4 : 'user4',
+            user5 : 'user5',
+            user6 : 'user6',
+            amount0 : 'amount0',
+            amount1 : 'amount1',
+            amount2 : 'amount2',
+            amount3 : 'amount3',
+            amount4 : 'amount4',
+            amount5 : 'amount5',
+            amount6 : 'amount6',
+            price0 : 'price0',
+            price1 : 'price1',
+            price2 : 'price2',
+            price3 : 'price3',
+            price4 : 'price4',
+            price5 : 'price5',
+            price6 : 'price6',
+            time0 : 'time0',
+            time1 : 'time1',
+            time2 : 'time2',
+            time3 : 'time3',
+            time4 : 'time4',
+            time5 : 'time5',
+            time6 : 'time6',
+        },
+        methods:{
+            leave(){
+                if(this.community.homes[this.homeName] == undefined){
+                    this.nameError = '用户名不存在';
+                    return;
+                }else{
+                    this.nameError = '';
+                    this.fossilEnergyRemain = this.community.homes[this.homeName].fossilEnergy;
+                    this.cleanEnergyRemain = this.community.homes[this.homeName].cleanEnergy;
+                }
+
+            },
+            send(){
+                let command = {};
+
+                command['type'] = 'changePrice';
+                command['content'] = this.homeName + ' ' + this.cleanEnergyPrice;
+                dataSocket.send(JSON.stringify(command));
+
+                command['type'] = 'chargeFossil';
+                command['content'] = this.homeName + ' ' + this.fossilEnergyCount;
+                dataSocket.send(JSON.stringify(command));
+                alert("成功！");
+            }
+        }
+    });
+
+
+
+
+    function UpdateTable(user,amount,price){
+        vm.user6 = vm.user5;vm.amount6 = vm.amount5;vm.price6 = vm.price5;vm.time6 = vm.time5;
+        vm.user5 = vm.user4;vm.amount5 = vm.amount4;vm.price5 = vm.price4;vm.time5 = vm.time4;
+        vm.user4 = vm.user3;vm.amount4 = vm.amount3;vm.price4 = vm.price3;vm.time4 = vm.time3;
+        vm.user3 = vm.user2;vm.amount3 = vm.amount2;vm.price3 = vm.price2;vm.time3 = vm.time2;
+        vm.user2 = vm.user1;vm.amount2 = vm.amount1;vm.price2 = vm.price1;vm.time2 = vm.time1;
+        vm.user1 = vm.user0;vm.amount1 = vm.amount0;vm.price1 = vm.price0;vm.time1 = vm.time0;
+        vm.user0 = user;vm.amount0 = amount;vm.price0 = price;let d=new Date();vm.time0 = d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+    }
+
+    function UpdateForm(community) {
+        vm.community = community;
+        vm.leave();
+    }
+
+    let webSocketAddress = 'ws://192.168.0.120:5556';
+    // Web Socket
+    let dataSocket = undefined;
+    function pageClose() {
+        dataSocket.close();
+    }
+    if ("WebSocket" in window) {
+        vm.state = true;
+        dataSocket = new WebSocket(webSocketAddress);
+        dataSocket.onopen = function () {
+            vm.state = true;
+            setInterval(function () {
+                if (dataSocket.readyState === 1) {
+                    let command = {};
+                    command['type'] = 'require';
+                    command['content'] = '';
+                    dataSocket.send(JSON.stringify(command));
+                }
+            }, 3000);
+        };
+        dataSocket.onerror = function() {
+            vm.state = false;
+        };
+        dataSocket.onmessage = function (event) {
+            let obj = JSON.parse(event.data);
+            if (obj.type === 'require') {
+                let market = obj.result.market;
+                let community = obj.result.community
+
+                UpdateTable(market.latestSell.user,market.latestSell.amount,market.latestSell.price);
+                UpdateForm(community);
+            }
+        };
+        dataSocket.onclose = function () {
+            vm.state = false;
+        }
+    }
+    else {
+        alert("Your browser does not support WebSocket");
+    }
+</script>
+</html>
