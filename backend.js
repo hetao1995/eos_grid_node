@@ -386,7 +386,10 @@ let CreateServer = function (port) {
 		});
 		conn.on("close", function (code, reason) {
 			console.log('Closed');
-		})
+		});
+        conn.on("error", function (code, reason) {
+            console.log("异常关闭")
+        });
 	}).listen(port);
 };
 
