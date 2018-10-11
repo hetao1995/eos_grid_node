@@ -53,8 +53,8 @@ let Simulator = {
 			}
 
 			// Generators charge battery
-			instance.community.generator[0].generationSpeed = Math.round(Number((50+Math.random()*100).toFixed(2)));
-			instance.community.generator[1].generationSpeed = Math.round(Number((25+Math.random()*50).toFixed(2)));
+			instance.community.generator[0].generationSpeed = Math.round(Number((20+Math.random()*10).toFixed(2)));
+			instance.community.generator[1].generationSpeed = Math.round(Number((15+Math.random()*10).toFixed(2)));
 			instance.community.generator.forEach(function (generator) {
 				generator.generateEnergy(instance.community.battery[0]);
 			});
